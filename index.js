@@ -1,17 +1,48 @@
 let map;
-let accMarker;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 33.5890195, lng: 130.4069459 },
         zoom: 15,
     });
+    let myinfoWindow = new google.maps.InfoWindow();
+    const locationButton = document.createElement("button");
 
-    const labels = [
+    locationButton.textContent = "Pan to Current Location";
+    locationButton.classList.add("custom-map-control-button");
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+    locationButton.addEventListener("click", () => {
+      // Try HTML5 geolocation.
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            };
+  
+            myinfoWindow.setPosition(pos);
+            myinfoWindow.setContent("Location found.");
+            myinfoWindow.open(map);
+            map.setCenter(pos);
+          },
+          () => {
+            handleLocationError(true, myinfoWindow, map.getCenter());
+          }
+        );
+      } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, myinfoWindow, map.getCenter());
+      }
+    });
+    
+    var labels = [
         { label: 'H', contents: '숙소', lat: 33.5890195, lng: 130.4069459 },
         { label: 'A', contents: '후쿠오카 공항', lat: 33.59003, lng: 130.44677 },
-        { label: 'T', contents: '하카타 역', lat: 33.5891992, lng: 130.4168963 },
-        { label: 'T', contents: '텐진 역, 지하상가', lat: 33.5855888, lng: 130.3992804 },
+        { label: 'T', contents: '하카타 역', lat: 33.58985, lng: 130.42038 },
+        { label: 'T', contents: '텐진미나미 역', lat: 33.58894, lng: 130.4001294 },
+        { label: 'T', contents: '나카스카와바타 역', lat: 33.59458091451427, lng: 130.4062388703589 },
+        { label: 'T', contents: '텐진 역, 지하상가', lat: 33.5914006, lng: 130.3988788 },
         { label: '1-1', contents: '야키토리 라쿠가키', lat: 33.5923325, lng: 130.4137423 },
         { label: '1-2', contents: '후쿠오카 성터', lat: 33.5855839, lng: 130.3827008 },
         { label: '1-3', contents: '스미요시 신사', lat: 33.5859192, lng: 130.4137369 },
@@ -30,16 +61,15 @@ function initMap() {
         { label: '아-1', contents: '하카탄사카나야고로-닭고기 전골', lat: 33.5938971, lng: 130.4073216 },
         { label: '자-1', contents: '카즈토미-가정식', lat: 33.5922863, lng: 130.406302 }
     ];
-
+    
     labels.forEach(({ label, contents, lat, lng }) => {
         const marker = new google.maps.Marker({
             position: { lat: lat, lng: lng },
             label,
             map: map,
         });
-
         const infowindow = new google.maps.InfoWindow();
-
+        
         marker.addListener("click", () => {
             infowindow.setContent(contents);
             infowindow.open({
@@ -51,3 +81,17 @@ function initMap() {
 };
 
 window.initMap = initMap;
+/*
+function myLocation (pos){
+    var myLat = pos.coords.latitude;
+    var myLng = pos.coords.longitude;
+};
+var locc = navigator.geolocation.getCurrentPosition(myLocation);
+
+const new_marker = new google.maps.Marker({
+    position:{myLat, myLng},
+    label : "M",
+    map: map,
+});
+var userLocation = new google.maps.LatLng(myLat, myLng);
+*/
