@@ -5,7 +5,7 @@ function initMap() {
         center: { lat: 33.5890195, lng: 130.4069459 },
         zoom: 15,
     });
-    /*
+    
     const locationButton = document.createElement("button");
     locationButton.textContent = "Pan to Current Location";
     locationButton.classList.add("custom-map-control-button");
@@ -35,7 +35,7 @@ function initMap() {
         handleLocationError(false, myloc, map.getCenter());
       }
     });
-    */
+    
     var labels = [
         { label: 'H', contents: '숙소', lat: 33.5890195, lng: 130.4069459 },
         { label: 'A', contents: '후쿠오카 공항', lat: 33.59003, lng: 130.44677 },
